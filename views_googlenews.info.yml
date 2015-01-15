@@ -1,0 +1,5 @@
+name: Views Google News
+type: module
+description: Views Google News feed.
+package: NP8
+core: 8.x

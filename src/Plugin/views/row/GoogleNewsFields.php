@@ -1,0 +1,194 @@
+<?php
+
+/**
+ * @file
+ * Contains \Drupal\views_googlenews\Plugin\views\row\GoogleNewsFields.
+ */
+
+namespace Drupal\views_googlenews\Plugin\views\row;
+
+use Drupal\views\Plugin\views\row\RowPluginBase;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Renders an GoogleNews item based on fields.
+ *
+ * @ViewsRow(
+ *   id = "google_news_fields",
+ *   title = @Translation("Google News fields"),
+ *   help = @Translation("Display fields as Google News items."),
+ *   theme = "views_view_row_googlenews",
+ *   display_types = {"feed"}
+ * )
+ */
+class GoogleNewsFields extends RowPluginBase {
+
+  /**
+   * Does the row plugin support to add fields to it's output.
+   *
+   * @var bool
+   */
+  protected $usesFields = TRUE;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function defineOptions() {
+    $options = parent::defineOptions();
+    $options['loc_field'] = array('default' => '');
+    $options['news_publication_name_field'] = array('default' => '');
+    $options['news_publication_language_field'] = array('default' => '');
+    $options['news_access_field'] = array('default' => '');
+    $options['news_genres_field'] = array('default' => '');
+    $options['news_publication_date_field'] = array('default' => '');
+    $options['news_title_field'] = array('default' => '');
+    $options['news_keywords_field'] = array('default' => '');
+    $options['news_stock_tickers_field'] = array('default' => '');
+    return $options;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+    parent::buildOptionsForm($form, $form_state);
+
+    $initial_labels = array('' => $this->t('- None -'));
+    $view_fields_labels = $this->displayHandler->getFieldLabels();
+    $view_fields_labels = array_merge($initial_labels, $view_fields_labels);
+
+    $form['loc_field'] = array(
+      '#type' => 'select',
+      '#title' => $this->t('Loc attribute'),
+      '#description' => $this->t('The field that is going to be used as the Google News &lt;loc&gt; attribute for each row.'),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['loc_field'],
+      '#required' => TRUE,
+    );
+    // @todo If not set will be used site config.
+//    $form['news_publication_name_field'] = array(
+//      '#type' => 'select',
+//      '#title' => $this->t('Name attribute'),
+//      '#description' => $this->t('The field that is going to be used as the Google News &lt;news:name&gt; attribute for each row.'),
+//      '#options' => $view_fields_labels,
+//      '#default_value' => $this->options['news_publication_name_field'],
+//      '#required' => TRUE,
+//    );
+//    $form['news_publication_language_field'] = array(
+//      '#type' => 'select',
+//      '#title' => $this->t('Language attribute'),
+//      '#description' => $this->t('The field that is going to be used as the Google News &lt;news:language&gt; attribute for each row.'),
+//      '#options' => $view_fields_labels,
+//      '#default_value' => $this->options['news_publication_language_field'],
+//      '#required' => TRUE,
+//    );
+    $form['news_access_field'] = array(
+      '#type' => 'select',
+      '#title' => $this->t('Access attribute'),
+      '#description' => $this->t('The field that is going to be used as the Google News &lt;news:access&gt; attribute for each row.'),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['news_access_field'],
+    );
+    $form['news_genres_field'] = array(
+      '#type' => 'select',
+      '#title' => $this->t('Genres attribute'),
+      '#description' => $this->t('The field that is going to be used as the Google News &lt;news:genres&gt; attribute for each row.'),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['news_genres_field'],
+    );
+    $form['news_publication_date_field'] = array(
+      '#type' => 'select',
+      '#title' => $this->t('Publication date attribute'),
+      '#description' => $this->t('The field that is going to be used as the Google News &lt;news:publication_date&gt; attribute for each row.'),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['news_publication_date_field'],
+      '#required' => TRUE,
+    );
+    $form['news_title_field'] = array(
+      '#type' => 'select',
+      '#title' => $this->t('Title attribute'),
+      '#description' => $this->t('The field that is going to be used as the Google News &lt;news:title&gt; attribute for each row.'),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['news_title_field'],
+      '#required' => TRUE,
+    );
+    $form['news_keywords_field'] = array(
+      '#type' => 'select',
+      '#title' => $this->t('Keywords attribute'),
+      '#description' => $this->t('The field that is going to be used as the Google News &lt;news:keywords&gt; attribute for each row.'),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['news_keywords_field'],
+    );
+    $form['news_stock_tickers_field'] = array(
+      '#type' => 'select',
+      '#title' => $this->t('Stock tickers attribute'),
+      '#description' => $this->t('The field that is going to be used as the Google News &lt;news:stock_tickers&gt; attribute for each row.'),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['news_stock_tickers_field'],
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validate() {
+    $errors = parent::validate();
+    // @todo Add validation.
+    return $errors;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function render($row) {
+    // Create the Google News item array.
+    $item = array();
+    $row_index = $this->view->row_index;
+    $item['loc'] = $this->getField($row_index, $this->options['loc_field']);
+    $item['news_publication_name'] = $this->getField($row_index, $this->options['news_publication_name_field']);
+    $item['news_publication_language'] = $this->getField($row_index, $this->options['news_publication_language_field']);
+    if ($this->options['news_access_field']) {
+      $item['news_access'] = $this->getField($row_index, $this->options['news_access_field']);
+    }
+    if ($this->options['news_genres_field']) {
+      $item['news_genres'] = $this->getField($row_index, $this->options['news_genres_field']);
+    }
+    $item['news_publication_date'] = $this->getField($row_index, $this->options['news_publication_date_field']);
+    $item['news_title'] = $this->getField($row_index, $this->options['news_title_field']);
+    if ($this->options['news_keywords_field']) {
+      $item['news_keywords'] = $this->getField($row_index, $this->options['news_keywords_field']);
+    }
+    if ($this->options['news_stock_tickers_field']) {
+      $item['news_stock_tickers'] = $this->getField($row_index, $this->options['news_stock_tickers_field']);
+    }
+
+    // Remove empty attributes.
+    $item = array_filter($item);
+
+    $build = array(
+      '#theme' => $this->themeFunctions(),
+      '#view' => $this->view,
+      '#options' => $this->options,
+      '#row' => $item,
+      '#field_alias' => isset($this->field_alias) ? $this->field_alias : '',
+    );
+    return $build;
+  }
+
+  /**
+   * Retrieves a views field value from the style plugin.
+   *
+   * @param $index
+   *   The index count of the row as expected by views_plugin_style::getField().
+   * @param $field_id
+   *   The ID assigned to the required field in the display.
+   * @return The field value.
+   */
+  public function getField($index, $field_id) {
+    if (empty($this->view->style_plugin) || !is_object($this->view->style_plugin) || empty($field_id)) {
+      return '';
+    }
+    return $this->view->style_plugin->getField($index, $field_id);
+  }
+
+}

@@ -20,11 +20,14 @@ use Drupal\Component\Utility\String;
 function template_preprocess_views_view_googlenews(&$variables) {
   $config = \Drupal::config('system.site');
   $name = $config->get('name');
-  $langcode = $config->get('langcode');
   $items = $variables['rows'];
   foreach ($items as &$item) {
-    $item['#row']['news_publication_name'] = $name;
-    $item['#row']['news_publication_language'] = $langcode;
+    if (empty($item['#row']['news_publication_name'])) {
+      $item['#row']['news_publication_name'] = $name;
+    }
+    if (empty($item['#row']['news_publication_language'])) {
+      $item['#row']['news_publication_language'] = \Drupal::languageManager()->getDefaultLanguage()->getId();
+    }
   }
   $variables['items'] = $items;
   // During live preview we don't want to output the header since the contents

@@ -59,73 +59,76 @@ class GoogleNewsFields extends RowPluginBase {
 
     $form['loc_field'] = array(
       '#type' => 'select',
-      '#title' => $this->t('Loc attribute'),
-      '#description' => $this->t('The field that is going to be used as the Google News &lt;loc&gt; attribute for each row.'),
+      '#title' => $this->t('Location'),
+      '#description' => $this->t('The URL to the news (&lt;loc&gt;).'),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['loc_field'],
       '#required' => TRUE,
     );
-    // @todo If not set will be used site config.
-//    $form['news_publication_name_field'] = array(
-//      '#type' => 'select',
-//      '#title' => $this->t('Name attribute'),
-//      '#description' => $this->t('The field that is going to be used as the Google News &lt;news:name&gt; attribute for each row.'),
-//      '#options' => $view_fields_labels,
-//      '#default_value' => $this->options['news_publication_name_field'],
-//      '#required' => TRUE,
-//    );
-//    $form['news_publication_language_field'] = array(
-//      '#type' => 'select',
-//      '#title' => $this->t('Language attribute'),
-//      '#description' => $this->t('The field that is going to be used as the Google News &lt;news:language&gt; attribute for each row.'),
-//      '#options' => $view_fields_labels,
-//      '#default_value' => $this->options['news_publication_language_field'],
-//      '#required' => TRUE,
-//    );
+    $form['news_publication_name_field'] = array(
+      '#type' => 'select',
+      '#title' => $this->t('Name'),
+      '#description' => $this->t('The name of the publication (&lt;news:name&gt;), defaults to the site name.'),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['news_publication_name_field'],
+    );
+    $form['news_publication_language_field'] = array(
+      '#type' => 'select',
+      '#title' => $this->t('Language code'),
+      '#description' => $this->t('The language code (&lt;news:language&gt;). Must be a language code, will use the default language if not provided.'),
+      '#options' => $view_fields_labels,
+      '#default_value' => $this->options['news_publication_language_field'],
+    );
     $form['news_access_field'] = array(
       '#type' => 'select',
-      '#title' => $this->t('Access attribute'),
-      '#description' => $this->t('The field that is going to be used as the Google News &lt;news:access&gt; attribute for each row.'),
+      '#title' => $this->t('Access'),
+      '#description' => $this->t('Access information (&lt;news:access&gt;), must be Subscription, Registration or an empty string if access is not restricted.'),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['news_access_field'],
     );
     $form['news_genres_field'] = array(
       '#type' => 'select',
-      '#title' => $this->t('Genres attribute'),
+      '#title' => $this->t('Genres'),
       '#description' => $this->t('The field that is going to be used as the Google News &lt;news:genres&gt; attribute for each row.'),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['news_genres_field'],
     );
     $form['news_publication_date_field'] = array(
       '#type' => 'select',
-      '#title' => $this->t('Publication date attribute'),
-      '#description' => $this->t('The field that is going to be used as the Google News &lt;news:publication_date&gt; attribute for each row.'),
+      '#title' => $this->t('Publication date'),
+      '#description' => $this->t('The publication date of the news (&lt;news:publication_date&gt;).'),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['news_publication_date_field'],
       '#required' => TRUE,
     );
     $form['news_title_field'] = array(
       '#type' => 'select',
-      '#title' => $this->t('Title attribute'),
-      '#description' => $this->t('The field that is going to be used as the Google News &lt;news:title&gt; attribute for each row.'),
+      '#title' => $this->t('Title'),
+      '#description' => $this->t('The news title (&lt;news:title&gt;).'),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['news_title_field'],
       '#required' => TRUE,
     );
     $form['news_keywords_field'] = array(
       '#type' => 'select',
-      '#title' => $this->t('Keywords attribute'),
-      '#description' => $this->t('The field that is going to be used as the Google News &lt;news:keywords&gt; attribute for each row.'),
+      '#title' => $this->t('Keywords'),
+      '#description' => $this->t('Keywords or tags for this news (Google News &lt;news:keywords&gt;).'),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['news_keywords_field'],
     );
     $form['news_stock_tickers_field'] = array(
       '#type' => 'select',
-      '#title' => $this->t('Stock tickers attribute'),
-      '#description' => $this->t('The field that is going to be used as the Google News &lt;news:stock_tickers&gt; attribute for each row.'),
+      '#title' => $this->t('Stock tickers'),
+      '#description' => $this->t('Stock ticker references (&lt;news:stock_tickers&gt;)'),
       '#options' => $view_fields_labels,
       '#default_value' => $this->options['news_stock_tickers_field'],
     );
+
+    $form['documentation'] = [
+      '#type' => 'item',
+      '#title' => $this->t('Documentation'),
+      '#markup' => $this->t('See <a href="@url">the Google News Sitemap reference</a> for more information', ['@url' => 'https://support.google.com/news/publisher/answer/74288?hl=en#tagdefinitions']),
+    ];
   }
 
   /**

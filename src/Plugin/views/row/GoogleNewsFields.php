@@ -176,12 +176,13 @@ class GoogleNewsFields extends RowPluginBase {
   /**
    * Retrieves a views field value from the style plugin.
    *
-   * @param $index
+   * @param int $index
    *   The index count of the row as expected by views_plugin_style::getField().
-   * @param $field_id
+   * @param int $field_id
    *   The ID assigned to the required field in the display.
    *
-   * @return The field value.
+   * @return string
+   *   The field value.
    */
   public function getField($index, $field_id) {
     if (empty($this->view->style_plugin) || !is_object($this->view->style_plugin) || empty($field_id)) {
